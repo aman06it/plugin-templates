@@ -154,8 +154,8 @@
       "name",
       "output-dir",
       "sandbox",
-      "shell-title",
-      "src"
+      "src",
+      "title"
     ],
     "plugin": "@salesforce/plugin-templates"
   },

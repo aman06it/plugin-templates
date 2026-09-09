@@ -60,9 +60,9 @@ export default class UIEmbedding extends SfCommand<CreateOutput> {
       multiple: true,
       required: true,
     })(),
-    'shell-title': Flags.string({
-      summary: messages.getMessage('flags.shell-title.summary'),
-      description: messages.getMessage('flags.shell-title.description'),
+    title: Flags.string({
+      summary: messages.getMessage('flags.title.summary'),
+      description: messages.getMessage('flags.title.description'),
       required: true,
     }),
     'output-dir': outputDirFlagLightning,
@@ -78,7 +78,7 @@ export default class UIEmbedding extends SfCommand<CreateOutput> {
       componentname: flags.name,
       src: flags.src,
       sandbox: flags.sandbox.join(' '),
-      shellTitle: flags['shell-title'],
+      title: flags.title,
       outputdir: flags['output-dir'],
       apiversion: flags['api-version'],
       internal: flags.internal,

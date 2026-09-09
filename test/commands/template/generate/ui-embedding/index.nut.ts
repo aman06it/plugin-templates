@@ -45,7 +45,7 @@ describe('template generate ui-embedding:', () => {
 
     it('should scaffold an embedding LWC bundle with all four files', () => {
       execCmd(
-        `template generate ui-embedding --name ${name} --src ${src} --sandbox allow-forms --shell-title "${shellTitle}" --output-dir ${lwcDir()}`,
+        `template generate ui-embedding --name ${name} --src ${src} --sandbox allow-forms --title "${shellTitle}" --output-dir ${lwcDir()}`,
         { ensureExitCode: 0 }
       );
       assert.file(bundleFiles(name));
@@ -53,7 +53,7 @@ describe('template generate ui-embedding:', () => {
 
     it('should emit a <lightning-ui-embedding> element in the generated html', () => {
       execCmd(
-        `template generate ui-embedding --name ${name} --src ${src} --sandbox allow-forms --shell-title "${shellTitle}" --output-dir ${lwcDir()}`,
+        `template generate ui-embedding --name ${name} --src ${src} --sandbox allow-forms --title "${shellTitle}" --output-dir ${lwcDir()}`,
         { ensureExitCode: 0 }
       );
       const camel = name.charAt(0).toLowerCase() + name.slice(1);
@@ -62,7 +62,7 @@ describe('template generate ui-embedding:', () => {
 
     it('should join multiple --sandbox tokens into a single space-separated attribute', () => {
       execCmd(
-        `template generate ui-embedding --name MultiSandbox --src ${src} --sandbox allow-forms --sandbox allow-scripts --shell-title "${shellTitle}" --output-dir ${lwcDir()}`,
+        `template generate ui-embedding --name MultiSandbox --src ${src} --sandbox allow-forms --sandbox allow-scripts --title "${shellTitle}" --output-dir ${lwcDir()}`,
         { ensureExitCode: 0 }
       );
       assert.fileContent(
@@ -73,7 +73,7 @@ describe('template generate ui-embedding:', () => {
 
     it('should bind the src URL into the generated js as a reactive property', () => {
       execCmd(
-        `template generate ui-embedding --name SrcBinding --src ${src} --sandbox allow-forms --shell-title "${shellTitle}" --output-dir ${lwcDir()}`,
+        `template generate ui-embedding --name SrcBinding --src ${src} --sandbox allow-forms --title "${shellTitle}" --output-dir ${lwcDir()}`,
         { ensureExitCode: 0 }
       );
       assert.fileContent(path.join(lwcDir(), 'srcBinding', 'srcBinding.js'), src);
@@ -81,7 +81,7 @@ describe('template generate ui-embedding:', () => {
 
     it('should accept http URLs on localhost for local development', () => {
       execCmd(
-        `template generate ui-embedding --name LocalDev --src http://localhost:3000 --sandbox allow-forms --shell-title "${shellTitle}" --output-dir ${lwcDir()}`,
+        `template generate ui-embedding --name LocalDev --src http://localhost:3000 --sandbox allow-forms --title "${shellTitle}" --output-dir ${lwcDir()}`,
         { ensureExitCode: 0 }
       );
       assert.fileContent(path.join(lwcDir(), 'localDev', 'localDev.js'), 'http://localhost:3000');
@@ -89,29 +89,29 @@ describe('template generate ui-embedding:', () => {
   });
 
   describe('ui-embedding failures', () => {
-    const baseFlags = '--name Foo --sandbox allow-forms --shell-title "Demo"';
+    const baseFlags = '--name Foo --sandbox allow-forms --title "Demo"';
 
     it('should throw missing --name error', () => {
       const stderr = execCmd(
-        'template generate ui-embedding --src https://app.example.com --sandbox allow-forms --shell-title "Demo"'
+        'template generate ui-embedding --src https://app.example.com --sandbox allow-forms --title "Demo"'
       ).shellOutput.stderr;
       expect(stderr).to.contain('Missing required flag');
     });
 
     it('should throw missing --src error', () => {
-      const stderr = execCmd('template generate ui-embedding --name Foo --sandbox allow-forms --shell-title "Demo"')
+      const stderr = execCmd('template generate ui-embedding --name Foo --sandbox allow-forms --title "Demo"')
         .shellOutput.stderr;
       expect(stderr).to.contain('Missing required flag');
     });
 
     it('should throw missing --sandbox error', () => {
       const stderr = execCmd(
-        'template generate ui-embedding --name Foo --src https://app.example.com --shell-title "Demo"'
+        'template generate ui-embedding --name Foo --src https://app.example.com --title "Demo"'
       ).shellOutput.stderr;
       expect(stderr).to.contain('Missing required flag');
     });
 
-    it('should throw missing --shell-title error (no fallback to --name)', () => {
+    it('should throw missing --title error (no fallback to --name)', () => {
       const stderr = execCmd(
         'template generate ui-embedding --name Foo --src https://app.example.com --sandbox allow-forms'
       ).shellOutput.stderr;
@@ -120,21 +120,21 @@ describe('template generate ui-embedding:', () => {
 
     it('should reject http src on a non-localhost host', () => {
       const stderr = execCmd(
-        `template generate ui-embedding --name Foo --src http://attacker.com --sandbox allow-forms --shell-title "Demo" --output-dir ${lwcDir()}`
+        `template generate ui-embedding --name Foo --src http://attacker.com --sandbox allow-forms --title "Demo" --output-dir ${lwcDir()}`
       ).shellOutput.stderr;
       expect(stderr).to.contain('HTTPS URL');
     });
 
     it('should reject non-http(s) protocols', () => {
       const stderr = execCmd(
-        `template generate ui-embedding --name Foo --src ftp://example.com --sandbox allow-forms --shell-title "Demo" --output-dir ${lwcDir()}`
+        `template generate ui-embedding --name Foo --src ftp://example.com --sandbox allow-forms --title "Demo" --output-dir ${lwcDir()}`
       ).shellOutput.stderr;
       expect(stderr).to.contain('HTTPS URL');
     });
 
     it('should reject malformed --src input', () => {
       const stderr = execCmd(
-        `template generate ui-embedding --name Foo --src not-a-url --sandbox allow-forms --shell-title "Demo" --output-dir ${lwcDir()}`
+        `template generate ui-embedding --name Foo --src not-a-url --sandbox allow-forms --title "Demo" --output-dir ${lwcDir()}`
       ).shellOutput.stderr;
       expect(stderr).to.contain('HTTPS URL');
     });
@@ -149,7 +149,7 @@ describe('template generate ui-embedding:', () => {
 
     it('should throw missing lwc parent folder error when output-dir is not under lwc/', () => {
       const stderr = execCmd(
-        `template generate ui-embedding --name Foo --src https://app.example.com --sandbox allow-forms --shell-title "Demo" --output-dir ${path.join(
+        `template generate ui-embedding --name Foo --src https://app.example.com --sandbox allow-forms --title "Demo" --output-dir ${path.join(
           session.project.dir,
           'somewhere-else'
         )}`
