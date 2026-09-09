@@ -14,7 +14,7 @@ Generate a Lightning Web Component (LWC) bundle that wraps the <lightning-ui-emb
 
 # description
 
-The generated LWC bundle consumes the first-party <lightning-ui-embedding> component, which is pre-wired with the three required attributes: the embedding URL (src), iframe sandbox tokens, and an accessible iframe title (title).
+The generated LWC bundle consumes the first-party <lightning-ui-embedding> component, which is pre-wired with the three required attributes: the embedding URL (--src), iframe sandbox tokens, and an accessible iframe title (--title).
 
 The generated LWC bundle contains four files (.html, .js, .js-meta.xml, .css) in a directory named with the camelCased component name. The bundle must live under a parent folder named "lwc".
 
